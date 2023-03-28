@@ -5,9 +5,11 @@ const path = require('path');
 // 3rd party requirements
 const passport = require('passport');
 const session = require('express-session');
+//const {dateformat} = require('dateformat');
 
 // Database for users, tweets etc
 const User = require('./model/user');
+const Post = require('./model/post');
 
 const SITE_NAME = "A Twitter Clone";
 
@@ -45,11 +47,16 @@ app.use((req, res, next) => {
 });
 
 app.use('/', router);
+app.use(express.static(path.join(__dirname, '/views/')));
 
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/views/'));
 app.set('view engine', 'hbs');
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res, next) => {
+    const posts = await Post.find().limit(10);
+
+    res.locals.posts = posts;
+
     res.render('index');
 });
 
@@ -102,6 +109,22 @@ router.route('/login')
             });
         })(req, res);
     });
+
+router.post('/post', (req, res) => {
+    const body = req.body;
+
+    if (req.isAuthenticated())
+    {
+        const post = body['post'];
+        const username = req.user.username;
+
+        Post.create({post: post, username: username, postDate: new Date()});
+
+        return res.redirect('/');
+    }
+
+    return res.redirect('/login');
+});
 
 app.listen(process.env.port || 8080);
 

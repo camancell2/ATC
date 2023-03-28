@@ -4,12 +4,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-    {{#if authenticated}}
-        <h1>Welcome, {{username}}</h1>
-    {{else}}
-        <h1>You are not signed in</h1>
-    {{/if}}
+    <div>
+        <a class="active" href="/">Home</a>
+
+        {{# if authenticated}}
+            <a>Hello, {{username}}</a>
+            <a href="/logout">Sign Out</a>
+        {{else}}
+            <a href="/login">Sign In</a>
+            <a href="/register">Sign Up</a>
+        {{/if}}
+    </div>
+
+    <br>
+    <br>
+
+    <form action="/post" method="post">
+        <ul>
+            <li>
+                <textarea for="post" name="post"></textarea>
+            </li>
+            <li>
+                <button type="submit">Post</button>
+            </li>
+        </ul>
+    </form>
+
+    <br>
+    <br>
+
+    {{#each posts}}
+        <div>
+            {{username}} posted:
+            <br>
+            {{post}}
+            <br>
+            {{postDate}}
+        </div>
+    {{/each}}
 </body>
 </html>

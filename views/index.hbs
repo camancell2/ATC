@@ -1,49 +1,32 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-</head>
-<body>
+<form action="/post" method="post">
+    <ul>
+        <li>
+            <textarea for="post" name="post"></textarea>
+        </li>
+        <li>
+            <button type="submit">Post</button>
+        </li>
+    </ul>
+</form>
+
+<br>
+<br>
+
+{{#each posts}}
     <div>
-        <a class="active" href="/">Home</a>
-
-        {{# if authenticated}}
-            <a>Hello, {{username}}</a>
-            <a href="/logout">Sign Out</a>
-        {{else}}
-            <a href="/login">Sign In</a>
-            <a href="/register">Sign Up</a>
-        {{/if}}
-    </div>
-
-    <br>
-    <br>
-
-    <form action="/post" method="post">
-        <ul>
-            <li>
-                <textarea for="post" name="post"></textarea>
-            </li>
-            <li>
-                <button type="submit">Post</button>
-            </li>
-        </ul>
-    </form>
-
-    <br>
-    <br>
-
-    {{#each posts}}
-        <div>
-            {{username}} posted:
+            <b>{{username}}</b> posted:
             <br>
             {{post}}
             <br>
             {{postDate}}
-        </div>
-    {{/each}}
-</body>
-</html>
+            <br>
+            {{#if ../authenticated}}
+                {{#if (or (eq username ../username) ../admin)}}
+                    <br>
+                    <form action="/delete/{{_id}}" method="get">
+                        <button type="submit">Delete</button>
+                    </form>
+                {{/if}}
+            {{/if}}
+    </div>
+{{/each}}

@@ -1,11 +1,14 @@
 // top tier requirements
 const express = require('express');
+const hbs = require('express-handlebars');
 const path = require('path');
 
 // 3rd party requirements
 const passport = require('passport');
 const session = require('express-session');
-//const {dateformat} = require('dateformat');
+const mongoose = require('mongoose');
+const datetime = require('date-and-time');
+const hbHelpers = require('handlebars-helpers')();
 
 // Database for users, tweets etc
 const User = require('./model/user');
@@ -22,7 +25,7 @@ app.use(express.json());
 
 // Setup session parameters for when users are logged in
 app.use(session({
-    secret: 'supersecret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 60 * 60 * 1000 } // Cookie lasts for one hour
@@ -32,43 +35,61 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Serialization and deserialization for 'Users'
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 passport.use(User.createStrategy());
 
 app.use((req, res, next) => {
+    // local variables within hbs
     res.locals.authenticated = req.isAuthenticated();
 
     if (req.isAuthenticated()) {
         res.locals.username = req.user.username;
+        res.locals.admin = req.user.isAdmin;
     }
     next();
+});
+
+mongoose.connect(process.env.DB_CONN, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 
 app.use('/', router);
 app.use(express.static(path.join(__dirname, '/views/')));
 
-app.set('views', path.join(__dirname, '/views/'));
+let hbsEngine = hbs.create({ extname: '.hbs', helpers: Object.assign({}, hbHelpers) });
+
+app.engine(hbsEngine.extname, hbsEngine.engine);
+
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'hbs');
 
 router.get('/', async (req, res, next) => {
-    const posts = await Post.find().limit(10);
-
-    res.locals.posts = posts;
-
-    res.render('index');
+    await Post.find().limit(10).then(docs => {
+        const docJson = docs.map(doc=>doc.toJSON());
+        res.render('index', {posts: docJson});
+    });
 });
 
 router.get('/logout', (req, res) => {
     req.logout((err) => {
-        
+        if (err)
+            // If the user is not signed in we throw them back to the home page
+            res.redirect('/');
     });
     res.redirect('/');
 });
 
 router.route('/register')
     .get((req, res) => {
+        // If we are logged in the user should not be able to access this page
+        if (req.isAuthenticated()) {
+            return res.redirect('/');
+        }
+
         res.render('register', { title: SITE_NAME + ' | Sign Up' });
     }).post((req, res) => {
         const body = req.body;
@@ -98,6 +119,11 @@ router.route('/register')
 
 router.route('/login')
     .get((req, res) => {
+        // If we are logged in the user should not be able to access this page
+        if (req.isAuthenticated()) {
+            return res.redirect('/');
+        }
+
         res.render('login', { title: SITE_NAME + ' | Sign In'});
     }).post(async (req, res, next) => {
         passport.authenticate('local', (err, user, info) => {
@@ -113,8 +139,7 @@ router.route('/login')
 router.post('/post', (req, res) => {
     const body = req.body;
 
-    if (req.isAuthenticated())
-    {
+    if (req.isAuthenticated()) {
         const post = body['post'];
         const username = req.user.username;
 
@@ -126,6 +151,18 @@ router.post('/post', (req, res) => {
     return res.redirect('/login');
 });
 
-app.listen(process.env.port || 8080);
+router.get('/delete/:id', async (req, res, next) => {
+    const postId = req.params.id;
+
+    if (req.isAuthenticated()) {
+        await Post.findByIdAndDelete(postId);
+        return res.redirect('/');
+    }
+
+    // TODO: Throw error if user attempts to delete while not in correct context
+    return res.redirect('/');
+});
+
+app.listen(process.env.PORT);
 
 console.log('ATC is listening on port 8080!');

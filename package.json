@@ -1,0 +1,19 @@
+{
+  "name": "atc",
+  "version": "1.0.0",
+  "description": "A Twitter clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/camancell2/ATC.git"
+  },
+  "author": "Cam & Ali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/camancell2/ATC/issues"
+  },
+  "homepage": "https://github.com/camancell2/ATC#readme"
+}

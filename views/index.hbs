@@ -18,7 +18,7 @@
             <br>
             {{post}}
             <br>
-            {{postDate}}
+            {{moment postDate format="dddd, DD MMMM YYYY HH:mm a"}}
             <br>
             {{#if ../authenticated}}
                 {{#if (or (eq username ../username) ../admin)}}

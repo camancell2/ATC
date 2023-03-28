@@ -17,16 +17,15 @@
   },
   "homepage": "https://github.com/camancell2/ATC#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "date-and-time": "^2.4.3",
+    "connect-flash": "^0.1.1",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.4",
     "express-session": "^1.17.3",
-    "handlebars-helpers": "^0.10.0",
+    "handlebars-helper-moment": "^0.2.0",
+    "handlebars-helpers": "^0.9.8",
     "hbs": "^4.2.0",
     "mongoose": "^7.0.3",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
     "path": "^0.12.7"
   }

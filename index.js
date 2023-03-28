@@ -7,12 +7,16 @@ const path = require('path');
 const passport = require('passport');
 const session = require('express-session');
 const mongoose = require('mongoose');
-const datetime = require('date-and-time');
+const hbMoment = require('handlebars-helper-moment')();
 const hbHelpers = require('handlebars-helpers')();
 
 // Database for users, tweets etc
 const User = require('./model/user');
 const Post = require('./model/post');
+
+const { homeView } = require('./controllers/home');
+const { loginGetView, loginPostView, registerGetView, registerPostView, logoutView} = require('./controllers/user');
+const { postPostView, deleteGetView } = require('./controllers/post');
 
 const SITE_NAME = "A Twitter Clone";
 
@@ -41,6 +45,7 @@ passport.deserializeUser(User.deserializeUser());
 
 passport.use(User.createStrategy());
 
+// Custom middle-ware to pass auth parameters to handlebars
 app.use((req, res, next) => {
     // local variables within hbs
     res.locals.authenticated = req.isAuthenticated();
@@ -52,6 +57,7 @@ app.use((req, res, next) => {
     next();
 });
 
+// Connect to the mongodb!
 mongoose.connect(process.env.DB_CONN, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -60,108 +66,28 @@ mongoose.connect(process.env.DB_CONN, {
 app.use('/', router);
 app.use(express.static(path.join(__dirname, '/views/')));
 
-let hbsEngine = hbs.create({ extname: '.hbs', helpers: Object.assign({}, hbHelpers) });
+let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment} });
 
 app.engine(hbsEngine.extname, hbsEngine.engine);
 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'hbs');
 
-router.get('/', async (req, res, next) => {
-    await Post.find().limit(10).then(docs => {
-        const docJson = docs.map(doc=>doc.toJSON());
-        res.render('index', {posts: docJson});
-    });
-});
+// Home Controller
+router.get('/', homeView);
 
-router.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err)
-            // If the user is not signed in we throw them back to the home page
-            res.redirect('/');
-    });
-    res.redirect('/');
-});
+// User Controller
+router.get('/logout', logoutView);
 
-router.route('/register')
-    .get((req, res) => {
-        // If we are logged in the user should not be able to access this page
-        if (req.isAuthenticated()) {
-            return res.redirect('/');
-        }
+router.get('/register', registerGetView);
+router.post('/register', registerPostView);
 
-        res.render('register', { title: SITE_NAME + ' | Sign Up' });
-    }).post((req, res) => {
-        const body = req.body;
+router.get('/login', loginGetView);
+router.post('/login', loginPostView);
 
-        const username = body['username'];
-        const email = body['email'];
-        const password = body['password'];
-        const confirmPassword = body['confirmPassword'];
+router.post('/post', postPostView);
 
-        // TODO: verify data above ^
-
-        User.register(new User({username: username, email: email, creationDate: new Date()}), password, function(err, user) {
-           if (err) {
-                console.log(err);
-                res.redirect('/register');
-           } else {
-               req.login(user, (err) => {
-                   if (err) {
-                       res.redirect('/register'); 
-                   } else {
-                       res.redirect('/login');
-                   }
-               });
-           }
-        });
-    });
-
-router.route('/login')
-    .get((req, res) => {
-        // If we are logged in the user should not be able to access this page
-        if (req.isAuthenticated()) {
-            return res.redirect('/');
-        }
-
-        res.render('login', { title: SITE_NAME + ' | Sign In'});
-    }).post(async (req, res, next) => {
-        passport.authenticate('local', (err, user, info) => {
-            if (err) return res.redirect('/login');
-            if (!user) return res.redirect('/login');
-
-            req.login(user, {session: true}, (err) => {
-                return res.redirect('/');
-            });
-        })(req, res);
-    });
-
-router.post('/post', (req, res) => {
-    const body = req.body;
-
-    if (req.isAuthenticated()) {
-        const post = body['post'];
-        const username = req.user.username;
-
-        Post.create({post: post, username: username, postDate: new Date()});
-
-        return res.redirect('/');
-    }
-
-    return res.redirect('/login');
-});
-
-router.get('/delete/:id', async (req, res, next) => {
-    const postId = req.params.id;
-
-    if (req.isAuthenticated()) {
-        await Post.findByIdAndDelete(postId);
-        return res.redirect('/');
-    }
-
-    // TODO: Throw error if user attempts to delete while not in correct context
-    return res.redirect('/');
-});
+router.get('/delete/:id', deleteGetView);
 
 app.listen(process.env.PORT);
 

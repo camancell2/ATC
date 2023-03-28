@@ -11,9 +11,20 @@
     "url": "git+https://github.com/camancell2/ATC.git"
   },
   "author": "Cam & Ali",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/camancell2/ATC/issues"
   },
-  "homepage": "https://github.com/camancell2/ATC#readme"
+  "homepage": "https://github.com/camancell2/ATC#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "hbs": "^4.2.0",
+    "mongoose": "^7.0.3",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^8.0.0",
+    "path": "^0.12.7"
+  }
 }

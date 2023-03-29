@@ -13,20 +13,5 @@
 <br>
 
 {{#each posts}}
-    <div>
-            <b>{{username}}</b> posted:
-            <br>
-            {{post}}
-            <br>
-            {{moment postDate format="dddd, DD MMMM YYYY HH:mm a"}}
-            <br>
-            {{#if ../authenticated}}
-                {{#if (or (eq username ../username) ../admin)}}
-                    <br>
-                    <form action="/delete/{{_id}}" method="get">
-                        <button type="submit">Delete</button>
-                    </form>
-                {{/if}}
-            {{/if}}
-    </div>
+    {{> post}}
 {{/each}}

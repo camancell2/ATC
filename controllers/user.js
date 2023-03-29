@@ -1,4 +1,5 @@
 const User = require('../model/user');
+const Post = require('../model/post');
 const passport = require('passport');
 
 const loginGetView = (req, res) => {
@@ -7,7 +8,7 @@ const loginGetView = (req, res) => {
         return res.redirect('/');
     }
     
-    res.render('login', { title: 'A Twitter Clone | Log in' });
+    return res.render('login', { title: 'A Twitter Clone | Log in' });
 };
 
 const loginPostView = (req, res) => {
@@ -55,13 +56,44 @@ const registerPostView = (req, res) => {
     });
 };
 
-const logoutView = (req, res) => {
+const logoutGetView = (req, res) => {
     req.logout((err) => {
         if (err)
             // If the user is not signed in we throw them back to the home page
-            res.redirect('/');
+            return res.redirect('/');
     });
-    res.redirect('/');
+    return res.redirect('/');
+};
+
+const profileGetView = async (req, res) => {
+    const username = req.params.username;
+
+    if (!req.isAuthenticated())
+        return res.redirect('/login');
+
+    if (!username) {
+        const sessionUsername = req.user.username;
+
+        res.locals.profileUsername = sessionUsername;
+
+        await Post.find({ username: sessionUsername }).limit(10).then(docsObj => {
+            const docs = docsObj.reverse().map(doc => doc.toJSON());
+    
+            return res.render('profile', { posts: docs });
+        });
+    } else {
+        res.locals.profileUsername = username;
+
+        await Post.find({ username: username }).limit(10).then(docsObj => {
+            const docs = docsObj.reverse().map(doc => doc.toJSON());
+    
+            return res.render('profile', { posts: docs });
+        });
+    }
+};
+
+const profilePostView = (req, res) => {
+
 };
 
 module.exports = {
@@ -69,5 +101,7 @@ module.exports = {
     loginPostView,
     registerGetView,
     registerPostView,
-    logoutView
+    logoutGetView,
+    profileGetView,
+    profilePostView
 }

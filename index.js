@@ -15,8 +15,8 @@ const User = require('./model/user');
 const Post = require('./model/post');
 
 const { homeView } = require('./controllers/home');
-const { loginGetView, loginPostView, registerGetView, registerPostView, logoutView} = require('./controllers/user');
-const { postPostView, deleteGetView } = require('./controllers/post');
+const { loginGetView, loginPostView, registerGetView, registerPostView, logoutGetView, profileGetView, profilePostView } = require('./controllers/user');
+const { postPostView, deleteGetView, likeGetView } = require('./controllers/post');
 
 const SITE_NAME = "A Twitter Clone";
 
@@ -66,7 +66,7 @@ mongoose.connect(process.env.DB_CONN, {
 app.use('/', router);
 app.use(express.static(path.join(__dirname, '/views/')));
 
-let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment} });
+let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment}, partialsDir: path.join(__dirname, '/partials/') });
 
 app.engine(hbsEngine.extname, hbsEngine.engine);
 
@@ -77,7 +77,7 @@ app.set('view engine', 'hbs');
 router.get('/', homeView);
 
 // User Controller
-router.get('/logout', logoutView);
+router.get('/logout', logoutGetView);
 
 router.get('/register', registerGetView);
 router.post('/register', registerPostView);
@@ -85,9 +85,17 @@ router.post('/register', registerPostView);
 router.get('/login', loginGetView);
 router.post('/login', loginPostView);
 
+// Specific profile given username
+router.get('/profile/:username', profileGetView);
+
+// Profile according to session
+router.get('/profile', profileGetView);
+
+// Post Controller
 router.post('/post', postPostView);
 
 router.get('/delete/:id', deleteGetView);
+router.get('/like/:id', likeGetView);
 
 app.listen(process.env.PORT);
 

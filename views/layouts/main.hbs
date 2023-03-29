@@ -8,10 +8,10 @@
 </head>
 <body>
     <div>
-        <a class="active" href="/">Home</a>
+        <a href="/">Home</a>
 
         {{#if authenticated}}
-            <a>Hello, {{username}}</a>
+            <a>Hello, <a href="/profile">{{username}}</a></a>
             <a href="/logout">Sign Out</a>
         {{else}}
             <a href="/login">Sign In</a>

@@ -1,17 +1,32 @@
-<form action="/post" method="post">
-    <ul>
-        <li>
-            <textarea for="post" name="post">Tell the world about your day!</textarea>
-        </li>
-        <li>
-            <button type="submit">Post</button>
-        </li>
-    </ul>
-</form>
+<div>
+    <form action="/post" method="post">
+        <ul>
+            <li>
+                <textarea for="post" name="post">Tell the world about your day!</textarea>
+            </li>
+            <li>
+                <button type="submit">Post</button>
+            </li>
+        </ul>
+    </form>
+</div>
 
 <br>
 <br>
 
-{{#each posts}}
-    {{> post}}
+<div>
+
+{{#each recentPosts}}
+    {{> largePost}}
 {{/each}}
+</div>
+
+<br>
+<br>
+
+<!-- Top 5 liked posts -->
+<div>
+{{#each mostLiked}}
+    {{> smallPost}}
+{{/each}}
+</div>

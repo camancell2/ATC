@@ -18,6 +18,12 @@ const user = new Schema({
     creationDate : {type: Date, require: true, unique: false, default: new Date()}
 });
 
-user.plugin(passportMongoose);
+var options = {
+    errorMessages: {
+        UserExistsError: 'A user with the given username or email is already registered'
+    }
+}
+
+user.plugin(passportMongoose, options);
 
 module.exports = mongoose.model('users', user);

@@ -1,5 +1,5 @@
 <div>
-    <img src="{{profilePicture}}" alt="Profile Picture">
+    <img src="{{profilePicture}}" alt="Profile Picture" style="height:75px; width:75px;">
 
     <br>
 
@@ -25,7 +25,7 @@
         <p>It's looking a little quiet here. Why not post?</p>
     {{else}}
         {{#each posts}}
-            {{> post}}
+            {{> largePost}}
         {{/each}}
     {{/isEmpty}}
 </div>

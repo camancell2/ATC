@@ -10,6 +10,9 @@ const postPostView = async (req, res) => {
 
         const user = await User.findByUsername(username);
 
+        if (!user)
+            return res.redirect('/login');
+
         Post.create({post: post, picture: user.profile.picture.location, username: user.username, postDate: new Date()});
 
         const previousUrl = req.headers.referer;

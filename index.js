@@ -31,8 +31,6 @@ const { postPostView, deleteGetView, likeGetView } = require('./controllers/post
 
 global.__basedir = __dirname;
 
-const SITE_NAME = "A Twitter Clone";
-
 // Setup express and router
 const app = express();
 const router = express.Router();
@@ -67,6 +65,9 @@ app.use((req, res, next) => {
         res.locals.username = req.user.username;
         res.locals.admin = req.user.isAdmin;
     }
+
+    res.locals.message = req.session.message;
+
     next();
 });
 

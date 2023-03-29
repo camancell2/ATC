@@ -1,11 +1,10 @@
-const Post = require('../model/post');
+const utils = require('../utils.js');
 
 const homeView = async (req, res) => {
-    await Post.find().limit(10).then(docsObj => {
-        const docs = docsObj.reverse().map(doc => doc.toJSON());
-
-        res.render('index', { title: 'A Twitter Clone | Home', posts: docs });
-    });
+    const recentPosts = await utils.GetPosts({"postDate": 'desc'}, 10);
+    const mostLiked = await utils.GetPosts({"liked.length": 'asc'}, 5);
+    
+    res.render('index', { title: 'A Twitter Clone | Home', recentPosts: recentPosts, mostLiked: mostLiked});
 };
 
 module.exports = {

@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/camancell2/ATC#readme",
   "dependencies": {
-    "connect-flash": "^0.1.1",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.4",
     "express-session": "^1.17.3",

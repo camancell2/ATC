@@ -1,0 +1,21 @@
+<h3>Profile options for {{username}}</h3>
+
+<form action="/saveprofile" method="post" enctype="multipart/form-data">
+    <ul>
+        <label for="picture">Picture:</label>
+        <li>
+            <input type="file" id="picture" name="picture"/>
+        </li>
+        <label for="name">Name:</label>
+        <li>
+            <input type="text" id="name" name="name" value="{{name}}" required/>
+        </li>
+        <label for="description">Description:</label>
+        <li>
+            <textarea for="description" name="description">{{description}}</textarea>
+        </li>
+        <li>
+            <button type="submit">Save Profile</button>
+        </li>
+    </ul>
+</form>

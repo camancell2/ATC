@@ -1,4 +1,5 @@
 <div>
+    <img src="{{picture}}" alt="Profile Picture">
     <b><a href="/profile/{{username}}">{{username}}</a></b> posted:
 </div>
 <div>
@@ -7,8 +8,8 @@
     <date>{{moment postDate format="dddd, DD MMMM YYYY h:mm a"}}</date>    
 </div>
 <div>
-    {{#if ../authenticated}}
-        {{#if (or (eq username ../username) ../admin)}}
+    {{#if @root.authenticated}}
+        {{#if (or (eq username @root.username) ../admin)}}
             <br>
             <form action="/delete/{{_id}}" method="get">
                 <button type="submit">Delete</button>

@@ -1,13 +1,16 @@
 const Post = require('../model/post');
+const User = require('../model/user');
 
-const postPostView = (req, res) => {
+const postPostView = async (req, res) => {
     const body = req.body;
 
     if (req.isAuthenticated()) {
         const post = body['post'];
         const username = req.user.username;
 
-        Post.create({post: post, username: username, postDate: new Date()});
+        const user = await User.findByUsername(username);
+
+        Post.create({post: post, picture: user.profile.picture.location, username: user.username, postDate: new Date()});
 
         const previousUrl = req.headers.referer;
 

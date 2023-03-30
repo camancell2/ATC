@@ -1,92 +1,8 @@
-const User = require('../model/user');
-const passport = require('passport');
 const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
 
 const utils = require('../utils.js');
-
-const loginGetView = (req, res) => {
-    req.session.message = '';
-
-    // If we are logged in the user should not be able to access this page
-    if (req.isAuthenticated()) {
-        return res.redirect('/');
-    }
-    
-    return res.render('login', { title: 'A Twitter Clone | Log in' });
-};
-
-
-const loginPostView = async (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-        if (err)
-            return res.redirect('/login');
-
-        if (!user) {
-            req.session.message = 'The username or password is incorrect';
-            return res.redirect('/login');
-        }
-
-        req.login(user, {session: true}, (err) => {
-            if (err) {
-                res.redirect('/login');
-            }
-
-            return res.redirect('/');
-        });
-    })(req, res, next);
-};
-
-const registerGetView = (req, res) => {
-    req.session.message = '';
-
-    if (req.isAuthenticated()) {
-        return res.redirect('/');
-    }
-
-    return res.render('register', { title: 'A Twitter Clone | Register' })
-};
-
-const registerPostView = async (req, res) => {
-    let form = new formidable.IncomingForm();
-
-    form.parse(req, async (err, fields, file) => {
-        let username = fields.username;
-        let email = fields.email;
-        let password = fields.password;
-        let confirmPassword = fields.confirmPassword;
-
-        if (password != confirmPassword) {
-            req.session.message = 'Please make sure your passwords match';
-            return res.redirect('/register');
-        }
-
-        User.register(new User({username: username, email: email, creationDate: new Date()}), password, function(err, user) {
-            if (err) {
-                req.session.message = err.message;
-                res.redirect('/register');
-            } else {
-                req.login(user, (err) => {
-                    if (err) {
-                        res.redirect('/register'); 
-                    } else {
-                        res.redirect('/login');
-                    }
-                });
-            }
-         });
-    });
-};
-
-const logoutGetView = (req, res) => {
-    req.logout((err) => {
-        if (err)
-            // If the user is not signed in we throw them back to the home page
-            return res.redirect('/');
-    });
-    return res.redirect('/');
-};
 
 const profileGetView = async (req, res) => {
     let username = req.params.username;
@@ -154,23 +70,19 @@ const saveProfilePostView = async (req, res) => {
 
     let username = req.user.username;
 
-    let name = '';
-    let description = '';
-
-    let location = '';
-    let contentType = '';
-
     form.parse(req, async function(err, fields, file) {
-        let oldFilePath = file.picture.filepath;
-        let fileSize = file.picture.size;
-        let newFilePath = path.join(__basedir, '/storage/', file.picture.newFilename);
-        let fileLocation = path.join('/storage/', file.picture.newFilename);
-        let fileContentType = file.picture.mimetype;
+        const user = await utils.GetUserByUsername(username);
 
-        fs.copyFile(oldFilePath, newFilePath, (err) => {
-            if (err)
-                console.log(err);
-        });
+        let fileLocation = '';
+        let fileContentType = '';
+        
+        let fileSize = file.picture.size;
+
+        const name = fields.name;
+        const description = fields.description;
+
+        user.profile.name = name;
+        user.profile.description = description;
 
         if (fileSize <= 0) {
             fileLocation = '/storage/default.png';
@@ -179,32 +91,28 @@ const saveProfilePostView = async (req, res) => {
             req.session.message = 'The picture uploaded is too large'
             return res.redirect('/editprofile');
         } else {
-            name = fields.name;
-            description = fields.description;
-            location = fileLocation;
-            contentType = fileContentType
+            let oldFilePath = file.picture.filepath;
+            let newFilePath = path.join(__basedir, '/storage/', file.picture.newFilename);
+            
+            fileLocation = path.join('/storage/', file.picture.newFilename);
+            fileContentType = file.picture.mimetype;
+        
+            fs.copyFile(oldFilePath, newFilePath, (err) => {
+                if (err)
+                    console.log(err);
+            });
 
-            const user = await utils.GetUserByUsername(username);
-
-            user.profile.name = name;
-            user.profile.description = description;
-        
-            user.profile.picture.location = location;
-            user.profile.picture.contentType = contentType;
-        
-            await utils.UpdateUserByUsername(username, user);
-        
-            return res.redirect('/profile');
+            user.profile.picture.location = fileLocation;
+            user.profile.picture.contentType = fileContentType;
         }
+
+        await utils.UpdateUserByUsername(username, user);
+        
+        return res.redirect('/profile');
     });
 }
 
 module.exports = {
-    loginGetView,
-    loginPostView,
-    registerGetView,
-    registerPostView,
-    logoutGetView,
     profileGetView,
     editProfileGetView,
     saveProfilePostView

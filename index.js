@@ -12,16 +12,18 @@ const hbHelpers = require('handlebars-helpers')();
 
 // Database for users, tweets etc
 const User = require('./model/user');
-const Post = require('./model/post');
 
 const { homeView } = require('./controllers/home');
 
-const { 
+const {
     loginGetView, 
     loginPostView, 
     registerGetView, 
     registerPostView, 
     logoutGetView, 
+} = require('./controllers/auth');
+
+const {
     profileGetView, 
     editProfileGetView, 
     saveProfilePostView 
@@ -80,6 +82,7 @@ mongoose.connect(process.env.DB_CONN, {
 app.use('/', router);
 app.use(express.static(path.join(__dirname, '/views/')));
 app.use('/storage', express.static(path.join(__dirname, '/storage/')));
+app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
 
 let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment}, partialsDir: path.join(__dirname, '/partials/') });
 
@@ -91,29 +94,26 @@ app.set('view engine', 'hbs');
 // Home Controller
 router.get('/', homeView);
 
-// User Controller
+// Auth Controller
 router.get('/logout', logoutGetView);
-
 router.get('/register', registerGetView);
+router.get('/login', loginGetView);
+
+router.post('/login', loginPostView);
 router.post('/register', registerPostView);
 
-router.get('/login', loginGetView);
-router.post('/login', loginPostView);
-
-// Specific profile given username
+// User Controller
 router.get('/profile/:username', profileGetView);
-
-// Profile according to session
 router.get('/profile', profileGetView);
-
 router.get('/editprofile', editProfileGetView);
+
 router.post('/saveprofile', saveProfilePostView);
 
 // Post Controller
-router.post('/post', postPostView);
-
 router.get('/delete/:id', deleteGetView);
 router.get('/like/:id', likeGetView);
+
+router.post('/post', postPostView);
 
 app.listen(process.env.PORT);
 

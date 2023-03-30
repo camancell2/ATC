@@ -1,11 +1,13 @@
-<div>
-    <b><a href="/profile/{{username}}">{{username}}</a></b> posted:
-</div>
-<div>
-    {{post}}
-    <br>
-    <date>{{moment postDate format="dddd, DD MMMM YYYY h:mm a"}}</date>    
-</div>
-<div>
-    <a>{{liked.length}}</a>
-</div>
+<li class="list-group-item">
+    <div class="container">
+        <b><a href="/profile/{{username}}">{{username}}</a></b>
+        - <date>{{moment postDate format="DD MMMM YYYY"}}</date>
+    </div>
+    <div class="container">
+        {{post}} 
+    </div>
+    <div class="container">
+        {{!-- Glyph here --}}
+        <a>{{liked.length}}</a>
+    </div>
+</li>

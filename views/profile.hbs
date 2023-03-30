@@ -1,14 +1,18 @@
-<div>
-    <img src="{{profilePicture}}" alt="Profile Picture" style="height:75px; width:75px;">
+<div class="profile-head">
+    <span class="profile-image">
+        <img src="{{profilePicture}}" alt="Profile Picture" style="height:75px; width:75px; border-radius: 50%;">
+    </span>
 
-    <br>
+    <span>
+        {{#isEmpty profileName}}
+        {{else}}
+            <b>{{profileName}}</b>
+        {{/isEmpty}}
+    </span>
 
-    {{#isEmpty profileName}}
-    {{else}}
-        <b>{{profileName}}</b>
-    {{/isEmpty}}
-
-    <p>@{{profileUsername}}</p>
+    <span class="profile-name">
+        @{{profileUsername}}
+    </span>
 
     {{#isEmpty profileDescription}}
     {{else}}
@@ -20,7 +24,7 @@
     </form>
 </div>
 
-<div>
+<div class="profile-body">
     {{#isEmpty posts}}
         <p>It's looking a little quiet here. Why not post?</p>
     {{else}}

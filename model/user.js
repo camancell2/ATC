@@ -7,11 +7,11 @@ const user = new Schema({
     username : {type: String, require: true, unique: true},
     email : {type: String, require: true, unique: true},
     profile : {
-        name : {type: String, require: false, unique: false, default: ''},
-        description : {type: String, require: false, unique: false, default: ''},
+        name : {type: String, require: true, unique: false, default: ''},
+        description : {type: String, require: true, unique: false, default: ''},
         picture: {
-            location: {type: String, require: false, unique: false, default: '/storage/default.png'},
-            contentType: {type: String, require: false, unique: false, default: 'image/png'}
+            location: {type: String, require: true, unique: false, default: '/storage/default.png'},
+            contentType: {type: String, require: true, unique: false, default: 'image/png'}
         }
     },
     isAdmin: {type: Boolean, require: true, unique: false, default: false},

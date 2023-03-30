@@ -1,25 +1,37 @@
-<div>
-    <img src="{{picture}}" alt="Profile Picture" style="height:60px; width:60px;">
-    <b><a href="/profile/{{username}}">{{username}}</a></b> posted:
-</div>
-<div>
-    {{post}}
-    <br>
-    <date>{{moment postDate format="dddd, DD MMMM YYYY h:mm a"}}</date>    
-</div>
-<div>
-    {{#if @root.authenticated}}
-        {{#if (or (eq username @root.username) ../admin)}}
-            <br>
-            <form action="/delete/{{_id}}" method="get">
-                <button type="submit">Delete</button>
+<li class="list-group-item rounded-0">
+    <div class="container d-inline-flex justify-content-left mt-3">
+        <img class="me-2" src="{{picture}}" alt="Profile Picture" style="height:50px; width:50px; border-radius: 50%;">
+        <b><a class="me-2" href="/profile/{{username}}">@{{username}}</a></b>
+        - <date class="ms-2">{{moment postDate format="DD MMMM YYYY hh:mm a"}}</date>
+    </div>
+
+    <div class="container d-inline-flex justify-content-left">
+        {{post}}
+    </div>
+
+    <div class="container d-inline-flex justify-content-left">
+        {{#if @root.authenticated}}
+            {{#if (or (eq username @root.username) ../admin)}}
+                <form action="/delete/{{_id}}" method="get">
+                    <button class="btn btn-default" type="submit">
+                    <span class="bi-trash" style="color:grey;"></span>
+                    </button>
+                </form>
+            {{/if}}
+
+            <form action="/like/{{_id}}" method="get" class="ms-2 me-2">
+                <button class="btn btn-default" type="submit">
+                    <span class="bi-heart-fill" style="color:red;"></span>
+                </button>
             </form>
+            <a>{{liked.length}}</a>
+        {{else}}
+            <form action="/like/{{_id}}" method="get" class="me-2">
+                <button class="btn btn-default" type="submit">
+                    <span class="bi-heart-fill" style="color:red;"></span>
+                </button>
+            </form>
+            <a>{{liked.length}}</a>
         {{/if}}
-    {{/if}}
-
-
-    <form action="/like/{{_id}}" method="get">
-        <input type="submit" value="Like"/>
-    </form>
-    <a>{{liked.length}}</a>
-</div>
+    </div>
+</li>

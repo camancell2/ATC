@@ -1,32 +1,16 @@
-<div>
-    <form action="/post" method="post">
-        <ul>
-            <li>
-                <textarea for="post" name="post">Tell the world about your day!</textarea>
-            </li>
-            <li>
-                <button type="submit">Post</button>
-            </li>
-        </ul>
-    </form>
+<div class="d-flex justify-content-center pt-5">
+    <div class="form-group w-25">
+        <form action="/post" method="post">
+            <textarea name="post" class="form-control rounded-0" rows="3" style="resize:none;">Tell us about your day...</textarea>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+    </div>
 </div>
 
-<br>
-<br>
-
-<div>
-
-{{#each recentPosts}}
-    {{> largePost}}
-{{/each}}
-</div>
-
-<br>
-<br>
-
-<!-- Top 5 liked posts -->
-<div>
-{{#each mostLiked}}
-    {{> smallPost}}
-{{/each}}
+<div class="container d-inline-flex justify-content-center mt-5">
+    <ul class="list-group">
+        {{#each recentPosts}}
+            {{> largePost}}
+        {{/each}}
+    </ul>
 </div>

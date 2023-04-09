@@ -14,6 +14,7 @@ const profileGetView = async (req, res) => {
         username = req.user.username;
     }
 
+    // See utils.js:32
     const profile = await utils.GetProfileByUsername(username);
 
     if (!profile)
@@ -23,6 +24,7 @@ const profileGetView = async (req, res) => {
     const description = profile.description;
     const picture = profile.picture.location;
 
+    // See utils.js:19
     const profilePosts = await utils.GetPostsByUsername(username, {'postDate':1}, 10);
 
     return res.render('profile', { 
@@ -43,6 +45,7 @@ const editProfileGetView = async (req, res) => {
     
     const username = req.user.username;
 
+    // See utils.js:32
     const profile = await utils.GetProfileByUsername(username);
 
     if (!profile)
@@ -70,6 +73,7 @@ const saveProfilePostView = async (req, res) => {
 
     let username = req.user.username;
 
+    // Parse incoming form
     form.parse(req, async function(err, fields, file) {
         const user = await utils.GetUserByUsername(username);
 
@@ -84,24 +88,29 @@ const saveProfilePostView = async (req, res) => {
         user.profile.name = name;
         user.profile.description = description;
 
+        // If file is empty just set to default profile picture
         if (fileSize <= 0) {
             fileLocation = '/storage/default.png';
             fileContentType = 'image/png';
+        // If the file is larger than 2mb then throw error (we don't need 4k++++ photos)
         } else if (fileSize >= 2000000) {
             req.session.message = 'The picture uploaded is too large'
             return res.redirect('/editprofile');
         } else {
+            // File is good
             let oldFilePath = file.picture.filepath;
             let newFilePath = path.join(__basedir, '/storage/', file.picture.newFilename);
             
             fileLocation = path.join('/storage/', file.picture.newFilename);
             fileContentType = file.picture.mimetype;
         
+            // Move it to our local storage
             fs.copyFile(oldFilePath, newFilePath, (err) => {
                 if (err)
                     console.log(err);
             });
 
+            // update accordingly to the user database
             user.profile.picture.location = fileLocation;
             user.profile.picture.contentType = fileContentType;
         }

@@ -15,6 +15,7 @@ const postPostView = async (req, res) => {
 
         Post.create({post: post, picture: user.profile.picture.location, username: user.username, postDate: new Date()});
 
+        // Redirect the user to the previous page they were at
         const previousUrl = req.headers.referer;
 
         return res.redirect(previousUrl);
@@ -45,10 +46,12 @@ const likeGetView = async (req, res) => {
         const username = req.user.username;
         const post = await Post.findById(postId);
 
+        // Check to see if user already liked the post
         if (!post.liked.includes(username)) {
             post.liked.push(username);
             await post.save();
         } else {
+            // Else we see it as the user unliking the post and remove them
             const index = post.liked.indexOf(username);
 
             if (index > -1) {

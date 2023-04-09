@@ -31,13 +31,14 @@ const {
 
 const { postPostView, deleteGetView, likeGetView } = require('./controllers/post');
 
-global.__basedir = __dirname;
-
 // Setup express and router
 const app = express();
 const router = express.Router();
 
+// Setup express to use url encoding (on requests)
 app.use(express.urlencoded({ extended: true }));
+
+// Setup express to use json
 app.use(express.json());
 
 // Setup session parameters for when users are logged in
@@ -79,15 +80,22 @@ mongoose.connect(process.env.DB_CONN, {
     useUnifiedTopology: true
 });
 
+// All requests are directed through 'router'
 app.use('/', router);
+
+// Tell express where our static files are
 app.use(express.static(path.join(__dirname, '/views/')));
 app.use('/storage', express.static(path.join(__dirname, '/storage/')));
 app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dist/css')));
 
+// Initialization of handle bars 
+// (what extension to use, any extra helper scripts and the path for partials)
 let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment}, partialsDir: path.join(__dirname, '/partials/') });
 
+// Tell express we are using handlebars
 app.engine(hbsEngine.extname, hbsEngine.engine);
 
+// Tell express where are views are located and tell express which view engine we are using handle bars
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'hbs');
 
@@ -115,6 +123,6 @@ router.get('/like/:id', likeGetView);
 
 router.post('/post', postPostView);
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT || 8080);
 
 console.log('ATC is listening on port 8080!');

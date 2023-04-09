@@ -3,6 +3,7 @@
 const Post = require('./model/post.js');
 const User = require('./model/user.js');
 
+// Get all posts with sorting and limit as provided
 async function GetPosts(sort = '', limit = 1) {
     let posts = await Post.find().sort(sort).limit(limit);
 
@@ -16,6 +17,7 @@ async function GetPosts(sort = '', limit = 1) {
     return json;
 }
 
+// Same as above by specific to the username provided
 async function GetPostsByUsername(username, sort = '', limit = 1) {
     const posts = await Post.find({username: username}).sort(sort).limit(limit);
 

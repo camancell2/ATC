@@ -4,40 +4,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{title}}</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-icons.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container pb-5">
-        <div class="d-flex bd-highlight">
-            <div class="bd-highlight"></div>
-            <div class="flex-grow-1 bd-highlight">
-                <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-dark">
-                    <div class="container">
-                        <a href="/" class="navbar-brand">A Twitter Clone</a>
-                            {{#if authenticated}}
-                                <div class="navbar-nav">
-                                    <a class="nav-item nav-link">Hello, {{username}}</a>
-                                    <a href="/profile" class="nav-item nav-link">Profile</a>
-                                    <a href="/logout" class="nav-item nav-link">Logout</a>
-                                </div>
-                            {{else}}
-                                <div class="navbar-nav ms-auto">
-                                    <a href="/login" class="nav-item nav-link">Login</a>
-                                    <a href="/register" class="nav-item nav-link">Register</a>
-                                </div>
-                            {{/if}}
+    <div class="body-container">
+        <div class="left-right-body"></div>
+        <div class="mid-body">
+            <div class="nav-bar">
+                <div class="home-logo">
+			        <a href="/">Twoitter</a>
+		        </div>
+
+                {{#if authenticated}}
+                    <div class="welcomemessage">
+                        <a href="/profile"><p>Welcome, <b>@{{username}}</b>!</p></a>
                     </div>
-                </nav>
-                <div class="container">
-                    {{{body}}}
-                </div>
+                    <div class="logout">
+                        <a href="/logout">Logout</a>
+                    </div>
+                {{else}}
+                    <div class="login">
+			            <a href="/login">Login</a>
+		            </div>
+
+		            <div class="register">
+			            <a href="/register">Register</a>
+		            </div>
+                {{/if}}
             </div>
-            <div class="bd-highlight"></div>
+
+            {{{body}}}
         </div>
+        <div class="left-right-body"></div>
     </div>
 </body>
 </html>

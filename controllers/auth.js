@@ -1,5 +1,6 @@
 const User = require('../model/user');
 const passport = require('passport');
+const formidable = require('formidable');
 
 const loginGetView = (req, res) => {
     req.session.message = '';

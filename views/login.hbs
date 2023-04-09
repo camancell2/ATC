@@ -1,21 +1,17 @@
 {{#if message}}
-    <h1>{{message}}</h1>
-{{else}}
-    <h1>No error</h1>
+    <div class="error-container">
+        {{message}}
+    </div>
 {{/if}}
 
-<form action="/login" method="post">
-    <ul>
-        <li>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Username" required>
-        </li>
-        <li>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-        </li>
-        <li>
-            <button type="submit">Sign In</button>
-        </li>
-    </ul>
-</form>
+<div class="login-container">
+    <form class="login-form" action="/login" method="post">
+        <label for="username">Username</label>
+        <input type="username" id="username" name="username" placeholder="Username" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+
+        <button type="submit">Sign In</button>
+    </form>
+</div>

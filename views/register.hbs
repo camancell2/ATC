@@ -1,32 +1,27 @@
 {{#if message}}
-    <h1>{{message}}</h1>
-{{else}}
-    <h1>No error</h1>
+    <div class="error-container">
+        {{message}}
+    </div>
 {{/if}}
 
-<form action="/register" method="post" enctype="multipart/form-data">
-    <ul>
-        <li>
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" placeholder="Username" required>
-        </li>
-        <li>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="Email" required>
-        </li>
-        <li>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-        </li>
-        <li>
+<div class="register-container">
+    <form class="register-form" action="/register" method="post" enctype="multipart/form-data">
+        <label for="username">Username</label>
+        <input type="username" id="username" name="username" placeholder="Username" required>
 
-        </li>
-        <li>
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Password" required>
-        </li>
-        <li>
-            <button type="submit">Sign Up</button>
-        </li>
-    </ul>
-</form>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Password" required>
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <div class="login-link">
+            Already have an account? <a href="/login">Login here</a>
+    </div>
+</div>

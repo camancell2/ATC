@@ -1,0 +1,278 @@
+.nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #00aced;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  height: 50px;
+}
+
+.body-container {
+  display: flex;
+  height: 100%;
+  padding: 15px;
+  gap: 5px;
+}
+
+.left-right-body {
+  flex-grow: .4;
+}
+
+.mid-body {
+  flex-grow: 1;
+}
+
+.home-logo {
+  flex: 1;
+  margin-left: 30px;
+  font-size: xx-large;
+  font-style: oblique;
+}
+
+.login,
+.register,
+.logout {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  background-color: #fff;
+  color: #1da1f2;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Login:hover,
+.Register:hover,
+.logout:hover {
+  background-color: #4bea39;
+  color: #fff;
+}
+
+.error-container {
+  background-color: rgb(252, 98, 98);
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  color: #060606;
+  padding: 10px;
+  border-radius: 10px;
+  height: 50px;
+  margin: 50px;
+}
+
+.posts-container,
+.personal-posts {
+  background-color: whitesmoke;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  color: #060606;
+  padding: 10px;
+  border-radius: 10px;
+  height: 50px;
+  margin: 50px;
+}
+.post-input {
+  background-color: whitesmoke;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  color: #060606;
+  padding: 10px;
+  border-radius: 10px;
+  height: 50px;
+  margin: 50px;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+a:active {
+  text-decoration:none;
+}
+
+
+body {
+  font-family: sans-serif;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.login-form input[type="username"],
+.login-form input[type="password"] {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.login-form button[type="submit"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #1da1f2;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button[type="submit"]:hover {
+  background-color: #00aced;
+}
+
+.register-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #1da1f2;
+  text-decoration: none;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 300px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.register-form h2 {
+  margin-top: 0;
+}
+
+.register-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.register-form input[type="email"],
+.register-form input[type="password"],
+.register-form input[type="username"] {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+}
+
+
+.register-form button[type="submit"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  background-color: #1da1f2;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-form button[type="submit"]:hover {
+  background-color: #00aced;
+}
+
+.login-link a {
+  color: #1da1f2;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+.login-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  margin-top: 20px;
+  margin-left: 30px;
+  margin-right: 30px;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+button[type="submit-post"] {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+button[type="submit-post"]:hover {
+  color: #1da1f2;
+  background-color: aqua;
+}

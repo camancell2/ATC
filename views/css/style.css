@@ -70,13 +70,31 @@
   background-color: whitesmoke;
   border: 1px solid black;
   display: flex;
-  align-items: center;
   color: #060606;
   padding: 10px;
   border-radius: 10px;
-  height: 50px;
   margin: 50px;
 }
+.profile-pic {
+  margin-right: 10px;
+}
+
+.post-material {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  flex-grow: 1;
+}
+
+.date-container {
+  display: flex;
+
+}
+
+.profile-name {
+  margin-right: 10px;
+
+}
+
 .post-input {
   background-color: whitesmoke;
   border: 1px solid black;

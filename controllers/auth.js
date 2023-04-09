@@ -1,6 +1,7 @@
 const User = require('../model/user');
 const passport = require('passport');
 const formidable = require('formidable');
+const utils = require('../utils');
 
 const loginGetView = (req, res) => {
     req.session.message = ''; // Reset the error message
@@ -78,6 +79,11 @@ const registerPostView = async (req, res) => {
             // back to registration page
             if (err) {
                 req.session.message = err.message;
+
+                // Lazy fix :/ not proud of it
+                if (err.code == 11000) {
+                    req.session.message = 'A user with the given username or email is already registered';
+                }
                 res.redirect('/register');
             } else {
                 // Otherwise we just log the user in

@@ -75,7 +75,21 @@
   border-radius: 10px;
   margin: 50px;
 }
+
+.profile-head {
+  margin-top: 10px;
+  position: relative;
+}
+
 .profile-pic {
+  margin-right: 10px;
+}
+
+.profile-name {
+  margin-right: 10px;
+}
+
+.profile-username {
   margin-right: 10px;
 }
 
@@ -87,12 +101,6 @@
 
 .date-container {
   display: flex;
-
-}
-
-.profile-name {
-  margin-right: 10px;
-
 }
 
 .post-input {

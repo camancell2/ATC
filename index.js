@@ -111,8 +111,7 @@ router.post('/login', loginPostView);
 router.post('/register', registerPostView);
 
 // User Controller
-router.get('/profile/:username', profileGetView);
-router.get('/profile', profileGetView);
+router.get('/profile/:username?', profileGetView);
 router.get('/editprofile', editProfileGetView);
 
 router.post('/saveprofile', saveProfilePostView);

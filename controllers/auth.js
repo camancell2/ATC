@@ -107,6 +107,7 @@ const logoutGetView = (req, res) => {
             // If the user is not signed in we throw them back to the home page
             return res.redirect('/');
     });
+    
     // Take the user back to the home page
     return res.redirect('/');
 };

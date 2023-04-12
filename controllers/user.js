@@ -8,7 +8,7 @@ const profileGetView = async (req, res) => {
     let username = req.params.username;
 
     if (!req.isAuthenticated())
-        return res.redirect('/login');
+        return res.redirect('/dev/login');
 
     if (!username) {
         username = req.user.username;
@@ -18,7 +18,7 @@ const profileGetView = async (req, res) => {
     const profile = await utils.GetProfileByUsername(username);
 
     if (!profile)
-        return res.redirect('/profile');
+        return res.redirect('/dev/profile');
 
     const name = profile.name;
     const description = profile.description;
@@ -41,7 +41,7 @@ const editProfileGetView = async (req, res) => {
     req.session.message = '';
 
     if (!req.isAuthenticated())
-        return res.redirect('/login');
+        return res.redirect('/dev/login');
     
     const username = req.user.username;
 
@@ -49,7 +49,7 @@ const editProfileGetView = async (req, res) => {
     const profile = await utils.GetProfileByUsername(username);
 
     if (!profile)
-        return res.redirect('/profile');
+        return res.redirect('/dev/profile');
 
     const name = profile.name;
     const description = profile.description;
@@ -117,7 +117,7 @@ const saveProfilePostView = async (req, res) => {
 
         await utils.UpdateUserByUsername(username, user);
         
-        return res.redirect('/profile');
+        return res.redirect('/dev/profile');
     });
 }
 

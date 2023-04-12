@@ -31,6 +31,8 @@ const {
 
 const { postPostView, deleteGetView, likeGetView } = require('./controllers/post');
 
+global.__basedir = __dirname;
+
 // Setup express and router
 const app = express();
 const router = express.Router();
@@ -81,7 +83,7 @@ mongoose.connect(process.env.DB_CONN, {
 });
 
 // All requests are directed through 'router'
-app.use('/', router);
+app.use('/dev/', router);
 
 // Tell express where our static files are
 app.use(express.static(path.join(__dirname, '/views/')));

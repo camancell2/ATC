@@ -6,7 +6,7 @@
     <title>{{title}}</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
     <div class="body-container">
@@ -14,23 +14,23 @@
         <div class="mid-body">
             <div class="nav-bar">
                 <div class="home-logo">
-			        <a href="/">Twoitter</a>
+			        <a href="/dev/">Twoitter</a>
 		        </div>
 
                 {{#if authenticated}}
                     <div class="welcomemessage">
-                        <a href="/profile"><p>Welcome, <b>@{{username}}</b>!</p></a>
+                        <a href="/dev/profile"><p>Welcome, <b>@{{username}}</b>!</p></a>
                     </div>
                     <div class="logout">
-                        <a href="/logout">Logout</a>
+                        <a href="/dev/logout">Logout</a>
                     </div>
                 {{else}}
                     <div class="login">
-			            <a href="/login">Login</a>
+			            <a href="/dev/login">Login</a>
 		            </div>
 
 		            <div class="register">
-			            <a href="/register">Register</a>
+			            <a href="/dev/register">Register</a>
 		            </div>
                 {{/if}}
             </div>

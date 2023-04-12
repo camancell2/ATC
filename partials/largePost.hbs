@@ -3,7 +3,7 @@
         <img src="{{picture}}" alt="Profile Picture" style="height:50px; width:50px; border-radius: 50%;">
     </div>
     <div>
-        <b class="profile-name"><a href="/profile/{{username}}">@{{username}}</a></b>
+        <b class="profile-name"><a href="/dev/profile/{{username}}">@{{username}}</a></b>
         <div class="post-material">
             {{post}}
         </div>
@@ -11,21 +11,21 @@
             <span>- <date>{{moment postDate format="DD MMMM YYYY hh:mm a"}}</date></span>
             {{#if @root.authenticated}}
                 {{#if (or (eq username @root.username) @root.admin)}}
-                    <form action="/delete/{{_id}}" method="get">
+                    <form action="/dev/delete/{{_id}}" method="get">
                         <button class="btn btn-default" type="submit">
                             <span class="bi-trash" style="color:grey;"></span>
                         </button>
                     </form>
                 {{/if}}
 
-                <form action="/like/{{_id}}" method="get" class="ms-2 me-2">
+                <form action="/dev/like/{{_id}}" method="get" class="ms-2 me-2">
                     <button class="btn btn-default" type="submit">
                         <span class="bi-heart-fill" style="color:red;"></span>
                     </button>
                 </form>
                 <a>{{liked.length}}</a>
             {{else}}
-                <form action="/like/{{_id}}" method="get" class="me-2">
+                <form action="/dev/like/{{_id}}" method="get" class="me-2">
                     <button class="btn btn-default" type="submit">
                         <span class="bi-heart-fill" style="color:red;"></span>
                     </button>

@@ -1,27 +1,18 @@
 {{#if message}}
-    <h1>{{message}}</h1>
-{{else}}
-    <h1>No error</h1>
+    <div class="error-container">
+        {{message}}
+    </div>
 {{/if}}
 
-<h3>Profile options for {{username}}</h3>
-
-<form action="/saveprofile" method="post" enctype="multipart/form-data">
-    <ul>
+<div class="editprofile-container">
+    <h3>Profile options for {{username}}</h3>
+    <form class="editprofile-form" action="/dev/saveprofile" method="post" enctype="multipart/form-data">
         <label for="picture">Picture:</label>
-        <li>
-            <input type="file" id="picture" name="picture" accept=".png, .jpg, .jpeg"/>
-        </li>
+        <input type="file" id="picture" name="picture" accept=".png, .jpg, .jpeg"/>
         <label for="name">Name:</label>
-        <li>
-            <input type="text" id="name" name="name" value="{{name}}"/>
-        </li>
+        <input type="text" id="name" name="name" value="{{name}}"/>
         <label for="description">Description:</label>
-        <li>
-            <textarea for="description" name="description">{{description}}</textarea>
-        </li>
-        <li>
-            <button type="submit">Save Profile</button>
-        </li>
-    </ul>
-</form>
+        <textarea for="description" name="description">{{description}}</textarea>
+        <button type="submit">Save Profile</button>
+    </form>
+</div>

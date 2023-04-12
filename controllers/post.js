@@ -11,7 +11,7 @@ const postPostView = async (req, res) => {
         const user = await User.findByUsername(username);
 
         if (!user)
-            return res.redirect('/login');
+            return res.redirect('/dev/login');
 
         Post.create({post: post, picture: user.profile.picture.location, username: user.username, postDate: new Date()});
 
@@ -21,7 +21,7 @@ const postPostView = async (req, res) => {
         return res.redirect(previousUrl);
     }
 
-    return res.redirect('/login');
+    return res.redirect('/dev/login');
 };
 
 const deleteGetView = async (req, res) => {
@@ -36,7 +36,7 @@ const deleteGetView = async (req, res) => {
     }
 
     // TODO: Throw error if user attempts to delete while not in correct context
-    return res.redirect('/login');
+    return res.redirect('/dev/login');
 };
 
 const likeGetView = async (req, res) => {
@@ -65,7 +65,7 @@ const likeGetView = async (req, res) => {
         return res.redirect(previousUrl);
     }
 
-    return res.redirect('/login');
+    return res.redirect('/dev/login');
 }
 
 module.exports = {

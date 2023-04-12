@@ -8,7 +8,7 @@ const loginGetView = (req, res) => {
 
     // If we are logged in the user should not be able to access this page
     if (req.isAuthenticated()) {
-        return res.redirect('/');
+        return res.redirect('/dev');
     }
     
     return res.render('login', { title: 'A Twitter Clone | Log in' });
@@ -21,24 +21,24 @@ const loginPostView = async (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         // If any errors just redirect them to login
         if (err)
-            return res.redirect('/login');
+            return res.redirect('/dev/login');
 
         // If invalid username or password
         // Set error message and redirect to login
         if (!user) {
             req.session.message = 'The username or password is incorrect';
-            return res.redirect('/login');
+            return res.redirect('/dev/login');
         }
 
         // Finally we process the login and create the session along with the cookie
         req.login(user, {session: true}, (err) => {
             // Same as above
             if (err) {
-                res.redirect('/login');
+                res.redirect('/dev/login');
             }
 
             // Finally we redirect them to the home page
-            return res.redirect('/');
+            return res.redirect('/dev');
         });
     })(req, res, next);
 };
@@ -48,7 +48,7 @@ const registerGetView = (req, res) => {
 
     // If the user is already logged in just redirect to home page.. why are you even trying to register? >:(
     if (req.isAuthenticated()) {
-        return res.redirect('/');
+        return res.redirect('/dev');
     }
 
     // In any other case we just render the registration page
@@ -69,7 +69,7 @@ const registerPostView = async (req, res) => {
         // Check if the passwords match
         if (password != confirmPassword) {
             req.session.message = 'Please make sure your passwords match';
-            return res.redirect('/register');
+            return res.redirect('/dev/register');
         }
 
         // Passport provides a set of helper functions to create the user doc 
@@ -84,16 +84,16 @@ const registerPostView = async (req, res) => {
                 if (err.code == 11000) {
                     req.session.message = 'A user with the given username or email is already registered';
                 }
-                res.redirect('/register');
+                res.redirect('/dev/register');
             } else {
                 // Otherwise we just log the user in
                 req.login(user, (err) => {
                     // If login fails just redirect back to login page
                     if (err) {
-                        res.redirect('/login'); 
+                        res.redirect('/dev/login'); 
                     } else {
                         // Redirect back to home if success
-                        res.redirect('/');
+                        res.redirect('/dev');
                     }
                 });
             }
@@ -105,11 +105,11 @@ const logoutGetView = (req, res) => {
     req.logout((err) => {
         if (err)
             // If the user is not signed in we throw them back to the home page
-            return res.redirect('/');
+            return res.redirect('/dev');
     });
     
     // Take the user back to the home page
-    return res.redirect('/');
+    return res.redirect('/dev');
 };
 
 module.exports = {

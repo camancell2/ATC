@@ -2,6 +2,7 @@
 const express = require('express');
 const hbs = require('express-handlebars');
 const path = require('path');
+const dotenv = require('dotenv').config();
 
 // 3rd party requirements
 const passport = require('passport');
@@ -83,7 +84,7 @@ mongoose.connect(process.env.DB_CONN, {
 });
 
 // All requests are directed through 'router'
-app.use('/dev/', router);
+app.use('/', router);
 
 // Tell express where our static files are
 app.use(express.static(path.join(__dirname, '/views/')));
@@ -92,7 +93,7 @@ app.use('/css', express.static(path.join(__dirname, '/node_modules/bootstrap/dis
 
 // Initialization of handle bars 
 // (what extension to use, any extra helper scripts and the path for partials)
-let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment}, partialsDir: path.join(__dirname, '/partials/') });
+let hbsEngine = hbs.create({ extname: '.hbs', helpers: {hbHelpers, hbMoment}, partialsDir: path.join(__dirname, '/views', '/partials/') });
 
 // Tell express we are using handlebars
 app.engine(hbsEngine.extname, hbsEngine.engine);

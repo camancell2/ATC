@@ -1,35 +1,127 @@
-<div class="profile-head"> 
-    <span class="profile-pic">
-        <img src="{{profilePicture}}" alt="Profile Picture" style="height:75px; width:75px; border-radius: 50%;">
-    </span>
-
-    <span class="profile-name">
-        {{#isEmpty profileName}}
-        {{else}}
-            <b>{{profileName}}</b>
-        {{/isEmpty}}
-    </span>
-
-    <span class="profile-username">
-        @{{profileUsername}}
-    </span>
-
-    {{#isEmpty profileDescription}}
-    {{else}}
-        <p>{{profileDescription}}</p>
-    {{/isEmpty}}
-
-    <form action="/editprofile" method="get">
-        <button type="submit">Edit Profile</button>
-    </form>
+<div class="profile">
+    {{> profileSection userProfile isProfileOwner=profileOwner isFollowing=isFollowing}}
 </div>
-
-<div class="profile-body">
-    {{#isEmpty posts}}
-        <p>It's looking a little quiet here. Why not post?</p>
+<div class="tweets">
+    {{#unless tweetsAvailable}}
+        <p style="padding-top: 75px; text-align: center; font-size: 18px; font-weight: bold; color: white;">No tweets yet, check back later!</p>
     {{else}}
-        {{#each posts}}
-            {{> largePost}}
+        {{#each profileTweets}}
+            {{> smallTweet this isPostCreator=isPostCreator}}
         {{/each}}
-    {{/isEmpty}}
+    {{/unless}}
 </div>
+
+<div class="background-overlay"></div>
+    <div id="commentsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const isAuthenticatedValue = document.getElementById('isAuthenticated').getAttribute('data-authenticated');
+
+    const likeButtons = document.querySelectorAll('.likeButton');
+    const commentButtons = document.querySelectorAll('.commentButton');
+    const deleteButtons = document.querySelectorAll('.deleteButton');
+
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.addEventListener('click', function() {
+            const postId = deleteButton.getAttribute('data-post-id');
+
+            fetch(`/delete?post_id=${postId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    const tweetToDelete = document.querySelector(`.tweet[data-post-id="${postId}"]`);
+
+                    if (tweetToDelete) {
+                        tweetToDelete.remove();
+                    }
+                } else {
+                    console.error('Failed to delete the tweet.');
+                }
+            })
+            .catch(error => {
+                console.error('Error occurred while deleting the tweet:', error);
+            });
+        });
+    });
+
+    commentButtons.forEach(commentButton => {
+        const commentsModal = document.getElementById('commentsModal');
+        const backgroundOverlayComment = document.querySelector('.background-overlay');
+
+        commentButton.addEventListener('click', function() {
+            commentsModal.style.display = 'block';
+            backgroundOverlayComment.style.display = 'block';
+        })
+
+        document.querySelectorAll('.close').forEach(function(closeButton) {
+            closeButton.addEventListener('click', function() {
+                commentsModal.style.display = 'none';
+                backgroundOverlayComment.style.display = 'none';
+            })
+        });
+    })
+
+    likeButtons.forEach(likeButton => {
+        likeButton.addEventListener('click', function() {
+            const postId = likeButton.getAttribute('data-post-id');
+            const isLiked = likeButton.getAttribute('data-liked');
+
+            if (!isAuthenticatedValue) {
+                window.location.href = '/login';
+                return;
+            }
+
+            if (isLiked === 'true') {
+                unlikePost(postId, likeButton);
+            } else {
+                likePost(postId, likeButton);
+            }
+        })
+    })
+
+    const likePost = (postId, likeButton) => {
+        const likesCount = likeButton.querySelector('#likesCount');
+
+
+        fetch(`/like?post_id=${postId}&viewer={{viewer}}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                likeButton.setAttribute('data-liked', 'true');
+                likeButton.querySelector('i').classList.remove('far');
+                likeButton.querySelector('i').classList.add('fas');
+
+                let likesCountInt = parseInt(likesCount.textContent.slice(1, -1));
+                
+                likesCount.textContent = '(' + (likesCountInt += 1) + ')';
+            }
+        })
+    }
+
+    const unlikePost = (postId, likeButton) => {
+        const likesCount = likeButton.querySelector('#likesCount');
+
+
+        fetch(`/unlike?post_id=${postId}&viewer={{viewer}}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                likeButton.setAttribute('data-liked', 'false');
+                likeButton.querySelector('i').classList.remove('fas');
+                likeButton.querySelector('i').classList.add('far');
+
+                let likesCountInt = parseInt(likesCount.textContent.slice(1, -1));
+                
+                likesCount.textContent = '(' + (likesCountInt -= 1) + ')';
+            }
+        })
+    }
+</script>

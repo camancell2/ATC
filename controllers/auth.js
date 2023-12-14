@@ -1,121 +1,112 @@
-const User = require('../model/user');
-const passport = require('passport');
 const formidable = require('formidable');
-const utils = require('../utils');
 
-const loginGetView = (req, res) => {
-    req.session.message = ''; // Reset the error message
+const cognitoUtils = require('../utils/CognitoUtils');
+const database = require('../utils/Database');
 
-    // If we are logged in the user should not be able to access this page
-    if (req.isAuthenticated()) {
-        return res.redirect('/');
-    }
-    
-    return res.render('login', { title: 'A Twitter Clone | Log in' });
+const LoginGetView = async (req, res) => {
+    res.locals.showLines = false;
+
+    res.render('login', { messages: req.flash() });
 };
 
-
-const loginPostView = async (req, res, next) => {
-    // Passport uses pre set params with forms (such as username and password)
-    // So we just authenticate using the 'local' strategy
-    passport.authenticate('local', (err, user, info) => {
-        // If any errors just redirect them to login
-        if (err)
-            return res.redirect('/login');
-
-        // If invalid username or password
-        // Set error message and redirect to login
-        if (!user) {
-            req.session.message = 'The username or password is incorrect';
-            return res.redirect('/login');
-        }
-
-        // Finally we process the login and create the session along with the cookie
-        req.login(user, {session: true}, (err) => {
-            // Same as above
-            if (err) {
-                res.redirect('/login');
-            }
-
-            // Finally we redirect them to the home page
-            return res.redirect('/');
-        });
-    })(req, res, next);
-};
-
-const registerGetView = (req, res) => {
-    req.session.message = '';
-
-    // If the user is already logged in just redirect to home page.. why are you even trying to register? >:(
-    if (req.isAuthenticated()) {
-        return res.redirect('/');
-    }
-
-    // In any other case we just render the registration page
-    return res.render('register', { title: 'A Twitter Clone | Register' })
-};
-
-const registerPostView = async (req, res) => {
+const LoginPostView = async (req, res) => {
     let form = new formidable.IncomingForm();
 
-    // When the user clicks submit we fire it through a form parser
-    form.parse(req, async (err, fields, file) => {
-        // get our data from the form
-        let username = fields.username;
-        let email = fields.email;
-        let password = fields.password;
-        let confirmPassword = fields.confirmPassword;
-
-        // Check if the passwords match
-        if (password != confirmPassword) {
-            req.session.message = 'Please make sure your passwords match';
-            return res.redirect('/register');
-        }
-
-        // Passport provides a set of helper functions to create the user doc 
-        // as well as salt and hash the password to be secure
-        User.register(new User({username: username, email: email, creationDate: new Date()}), password, function(err, user) {
-            // If registration fails set the predefined error message from passport and redirect
-            // back to registration page
-            if (err) {
-                req.session.message = err.message;
-
-                // Lazy fix :/ not proud of it
-                if (err.code == 11000) {
-                    req.session.message = 'A user with the given username or email is already registered';
+    try {
+        const { fields } = await new Promise((resolve, reject) => {
+            form.parse(req, (err, fields) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({ fields });
                 }
-                res.redirect('/register');
-            } else {
-                // Otherwise we just log the user in
-                req.login(user, (err) => {
-                    // If login fails just redirect back to login page
-                    if (err) {
-                        res.redirect('/login'); 
-                    } else {
-                        // Redirect back to home if success
-                        res.redirect('/');
-                    }
-                });
+            });
+        });
+
+        let username = fields.username[0];
+        let password = fields.password[0];
+
+        try {
+            const tokens = await cognitoUtils.Login(username, password);
+            req.session.accessToken = tokens.accessToken;
+            req.session.idToken = tokens.idToken;
+            req.session.username = tokens.username;
+            res.redirect('/');
+        } catch (err) {
+            if (err.code) {
+                req.flash('error', err.message);
+                return res.redirect('/login');
             }
-         });
-    });
+        }
+    } catch (err) {
+        // Handle form parsing errors
+    }
 };
 
-const logoutGetView = (req, res) => {
-    req.logout((err) => {
-        if (err)
-            // If the user is not signed in we throw them back to the home page
-            return res.redirect('/');
-    });
-    
-    // Take the user back to the home page
-    return res.redirect('/');
+const RegisterGetView = async (req, res) => {
+    res.locals.showLines = false;
+
+    res.render('register', { messages: req.flash() });
+}
+
+const RegisterPostView = async (req, res) => {
+    let form = new formidable.IncomingForm();
+
+    try {
+        const { fields } = await new Promise((resolve, reject) => {
+            form.parse(req, (err, fields) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({ fields });
+                }
+            });
+        });
+
+        let username = fields.username[0];
+        let email = fields.email[0];
+        let password = fields.password[0];
+
+        try {
+            await cognitoUtils.Register(username, password, email);
+            await database.CreateProfile(username);
+            req.flash("warning", "You must verify your email before logging in!");
+            res.redirect('/');
+        } catch (err) {
+            console.log(err);
+
+            switch (err.code) {
+                case 'InvalidPasswordException':
+                    req.flash('error', 'Password is not long enough.');
+                    return res.redirect('/register');
+
+                case 'UsernameExistsException':
+                    req.flash('error', 'Username already in use.');
+                    return res.redirect('/register');
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        // Handle other errors or form parsing issues
+    }
+};
+
+
+const SignOutGetView = async (req, res) => {
+    req.session.accessToken = null;
+    req.session.idToken = null;
+
+    cognitoUtils.SignOut();
+
+    res.redirect('/login');
 };
 
 module.exports = {
-    loginGetView,
-    loginPostView,
-    registerGetView,
-    registerPostView,
-    logoutGetView,
+    LoginGetView,
+    LoginPostView,
+
+    RegisterGetView,
+    RegisterPostView,
+
+    SignOutGetView
 }

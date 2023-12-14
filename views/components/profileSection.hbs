@@ -1,0 +1,163 @@
+<div class="banner">
+    <!-- Banner image goes here -->
+    <img src="{{bannerImage}}" alt="Banner Image">
+</div>
+<div class="profile-overlay">
+    <img src="{{profileImage}}" alt="Profile Image">
+    <div class="profile-info">
+        <h2>{{name}}</h2>
+        <p>@{{username}}</p>
+
+        <!-- Max Characters 160 -->
+        <div class="profile-bio">
+            <p>{{bio}}</p>
+        </div>
+        
+        <p>Joined {{joinDate}}</p>
+        <div class="follow-info">
+            <p><b>{{followingCount}}</b> Following</p>
+            <p><b>{{followerCount}}</b> Followers</p>
+        </div>
+    </div>
+</div>
+
+{{#if isProfileOwner}}
+    <div class="follow-container">
+        <button id="editProfileButton" class="edit-profile-button">Edit Profile</button>
+    
+        <div class="background-overlay"></div>
+        <div id="editProfileModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form action="/editprofile" method="post" enctype="multipart/form-data">
+                    <div class="mini-profile">
+                        <div class="mini-banner">
+                            <div class="upload-container" id="bannerUploadContainer">
+                                <label for="bannerUpload">
+                                    <img id="miniBannerImagePreview" src="{{bannerImage}}" alt="Banner Image Preview">
+                                    <div class="upload-overlay" id="bannerUploadOverlay"></div>
+                                </label>
+                                <input type="file" id="bannerUpload" name="bannerImageFile" style="display: none" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="mini-profile-overlay">
+                            <div class="upload-container" id="profileUploadContainer">
+                                <label for="profileUpload">
+                                    <img id="miniProfileImagePreview" src="{{profileImage}}" alt="Profile Picture Preview">
+                                    <div class="upload-overlay" id="profileUploadOverlay" style="border-radius: 50%;"></div>
+                                </label>
+                                <input type="file" id="profileUpload" name="profileImageFile" style="display: none" accept="image/*">
+                            </div>
+                        </div>
+                        <div class="mini-profile-info">
+                            <br><br>
+                            <input type="text" name="name" placeholder="Enter your name" value="{{name}}">
+                            <br><br>
+                            <textarea name="bio" placeholder="Write something about yourself">{{bio}}</textarea>
+                            <br><br>
+                            <input type="submit" value="Save">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        {{!-- document.getElementById('miniProfileImagePreview').addEventListener('click', function(event) {
+            console.log('Profile picture upload clicked');
+        });
+
+        document.getElementById('miniBannerImagePreview').addEventListener('click', function(event) {
+            console.log('Banner upload clicked');
+        }); --}}
+    </script>
+
+    <script>
+        const editProfileModal = document.getElementById('editProfileModal');
+        const editProfileButton = document.getElementById('editProfileButton');
+        const backgroundOverlayEdit = document.querySelector('.background-overlay');
+
+        editProfileButton.addEventListener('click', function() {
+            editProfileModal.style.display = 'block';
+            backgroundOverlayEdit.style.display = 'block';
+        })
+
+        document.querySelectorAll('.close').forEach(function(closeButton) {
+            closeButton.addEventListener('click', function() {
+                editProfileModal.style.display = 'none';
+                backgroundOverlayEdit.style.display = 'none';
+            })
+        })
+
+        window.addEventListener('click', function(event) {
+            if (event.target === editProfileModal) {
+                editProfileModal.style.display = 'none';
+            }
+        });
+    </script>
+
+{{else}}
+    <div class="follow-container">
+        <button id="followButton" class="follow-button" data-username="{{username}}">
+            {{#if isFollowing}}
+                Following
+            {{else}}
+                Follow
+            {{/if}}
+        </button>
+    </div>
+
+    <script>
+        const followButton = document.getElementById('followButton');
+        let isFollowing = {{isFollowing}};
+
+        const handleFollowToggle = () => {
+            const username = followButton.getAttribute('data-username');
+
+            if (isFollowing) {
+                fetch(`/unfollow?username=${username}`, {
+                    method: 'POST'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        isFollowing = false;
+                        followButton.innerText = 'Follow';
+                        followButton.style.backgroundColor = ''; // Reset button color
+                    }
+                });
+            } else {
+                fetch(`/follow?username=${username}`, {
+                    method: 'POST'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        isFollowing = true;
+                        followButton.innerText = 'Following';
+                        followButton.style.backgroundColor = '#00aced'; // Change button color to blue
+                    }
+                });
+            }
+        };
+
+        followButton.addEventListener('click', handleFollowToggle);
+
+        followButton.addEventListener('mouseover', function() {
+            if (isFollowing) {
+                this.style.backgroundColor = '#ff4d4d';
+                this.innerText = 'Unfollow';
+            } else {
+                this.style.backgroundColor = '#00aced';
+            }
+        });
+
+        followButton.addEventListener('mouseout', function() {
+            if (isFollowing) {
+                this.style.backgroundColor = '#00aced';
+                this.innerText = 'Following';
+            } else {
+                this.style.backgroundColor = '';
+            }
+        });
+    </script>
+{{/if}}

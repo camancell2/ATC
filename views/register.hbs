@@ -1,11 +1,5 @@
-{{#if message}}
-    <div class="error-container">
-        {{message}}
-    </div>
-{{/if}}
-
-<div class="register-container">
-    <form class="register-form" action="/register" method="post" enctype="multipart/form-data">
+<div class="container">
+    <form action="/register" method="post" enctype="multipart/form-data">
         <label for="username">Username</label>
         <input type="username" id="username" name="username" placeholder="Username" required>
 
@@ -20,8 +14,5 @@
 
         <button type="submit">Sign Up</button>
     </form>
-
-    <div class="login-link">
-            Already have an account? <a href="/login">Login here</a>
-    </div>
+    <p style="margin-top: 10px;">Already have an account? <a href="/login">Sign in here</a></p>
 </div>

@@ -1,43 +1,92 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>A Twitter Clone!</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+        <script>
+            function closeAlert(closeButton) {
+                const alert = closeButton.parentElement; // Get the parent alert div
+                alert.style.display = 'none'; // Hide the alert
+            }
+        </script>
+    </head>
+    <body>
+        <div id="isAuthenticated" data-authenticated="{{isAuthenticated}}"></div>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <div class="body-container">
-        <div class="left-right-body"></div>
-        <div class="mid-body">
-            <div class="nav-bar">
-                <div class="home-logo">
-			        <a href="/">Twoitter</a>
-		        </div>
+        {{#if showLines}}
+            <div class="page-container">
+        {{/if}}
+                <header>
+                    <nav>
+                        <div class="logo">
+                            <a href="/"> <!-- Add this anchor element -->
+                                <h3>ATC</h3>
+                            </a>
+                        </div>
+                        <form class="search-form" action="/search" method="post" enctype="multipart/form-data">
+                            <input type="text" id="search-input" name="q" placeholder="Search..." class="rounded-input">
+                        </form>
+                        <ul>
+                            {{#if isAuthenticated}}
+                                <li><a href="/">Explore</a></li>
+                                <li><a href="#">Notifications</a></li>
+                                <li><a href="/{{username}}">Profile</a></li>
+                                <li><a href="/signout">Sign Out</a></li>
+                            {{else}}
+                                <li><a href="/login">Log In</a></li>
+                                <li><a href="/register">Sign Up</a></li>
+                            {{/if}}
+                        </ul>
+                    </nav>
+                </header>
 
-                {{#if authenticated}}
-                    <div class="welcomemessage">
-                        <a href="/profile"><p>Welcome, <b>@{{username}}</b>!</p></a>
+                <div class="messages">
+                {{#if messages.error}}
+                    <div class="alert alert-error">
+                        <span class="alert-text">
+                            {{#each messages.error}}
+                                {{this}}
+                            {{/each}}
+                        </span>
+                        <span class="close-button" onclick="closeAlert(this)">&times;</span>
                     </div>
-                    <div class="logout">
-                        <a href="/logout">Logout</a>
-                    </div>
-                {{else}}
-                    <div class="login">
-			            <a href="/login">Login</a>
-		            </div>
-
-		            <div class="register">
-			            <a href="/register">Register</a>
-		            </div>
                 {{/if}}
-            </div>
 
-            {{{body}}}
-        </div>
-        <div class="left-right-body"></div>
-    </div>
-</body>
+                {{#if messages.success}}
+                    <div class="alert alert-success">
+                        <span class="alert-text">
+                            {{#each messages.success}}
+                                {{this}}
+                            {{/each}}
+                        </span>
+                        <span class="close-button" onclick="closeAlert(this)">&times;</span>
+                    </div>
+                {{/if}}
+
+                {{#if messages.warning}}
+                    <div class="alert alert-warning">
+                        <span class="alert-text">
+                            {{#each messages.warning}}
+                                {{this}}
+                            {{/each}}
+                        </span>
+                        <span class="close-button" onclick="closeAlert(this)">&times;</span>
+                    </div>
+                {{/if}}
+                </div>
+
+                <main>
+                    {{{body}}}
+                </main>
+
+                <footer>
+                    <p>&copy; 2023 A Twitter Clone - Cam</p>
+                </footer>
+
+        {{#if showLines}}
+            </div>
+        {{/if}}
+    </body>
 </html>

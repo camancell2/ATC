@@ -1,0 +1,129 @@
+<div class="tweet-box">
+    {{> tweetContent}}
+</div>
+
+<div class="tweets">
+    {{#each tweets}}
+    {{> smallTweet this username=username isPostCreator=isPostCreator}}
+    {{/each}}
+</div>
+
+<div class="background-overlay"></div>
+    <div id="commentsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    setInterval(function() {
+        location.reload();
+    }, 30000);
+</script>
+
+<script>
+    const isAuthenticatedValue = document.getElementById('isAuthenticated').getAttribute('data-authenticated');
+
+    const likeButtons = document.querySelectorAll('.likeButton');
+    const commentButtons = document.querySelectorAll('.commentButton');
+        const deleteButtons = document.querySelectorAll('.deleteButton');
+
+    deleteButtons.forEach(deleteButton => {
+        deleteButton.addEventListener('click', function() {
+            const postId = deleteButton.getAttribute('data-post-id');
+
+            fetch(`/delete?post_id=${postId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    const tweetToDelete = document.querySelector(`.tweet[data-post-id="${postId}"]`);
+
+                    if (tweetToDelete) {
+                        tweetToDelete.remove();
+                    }
+                } else {
+                    console.error('Failed to delete the tweet.');
+                }
+            })
+            .catch(error => {
+                console.error('Error occurred while deleting the tweet:', error);
+            });
+        });
+    });
+
+    commentButtons.forEach(commentButton => {
+        const commentsModal = document.getElementById('commentsModal');
+        const backgroundOverlayComment = document.querySelector('.background-overlay');
+
+        commentButton.addEventListener('click', function() {
+            commentsModal.style.display = 'block';
+            backgroundOverlayComment.style.display = 'block';
+        })
+
+        document.querySelectorAll('.close').forEach(function(closeButton) {
+            closeButton.addEventListener('click', function() {
+                commentsModal.style.display = 'none';
+                backgroundOverlayComment.style.display = 'none';
+            })
+        });
+    })
+
+
+    likeButtons.forEach(likeButton => {
+        likeButton.addEventListener('click', function() {
+            const postId = likeButton.getAttribute('data-post-id');
+            const isLiked = likeButton.getAttribute('data-liked');
+
+            if (!isAuthenticatedValue) {
+                window.location.href = '/login';
+                return;
+            }
+
+            if (isLiked === 'true') {
+                unlikePost(postId, likeButton);
+            } else {
+                likePost(postId, likeButton);
+            }
+        })
+    })
+
+    const likePost = (postId, likeButton) => {
+        const likesCount = likeButton.querySelector('#likesCount');
+
+        fetch(`/like?post_id=${postId}&viewer={{viewer}}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                likeButton.setAttribute('data-liked', 'true');
+                likeButton.querySelector('i').classList.remove('far');
+                likeButton.querySelector('i').classList.add('fas');
+
+                let likesCountInt = parseInt(likesCount.textContent.slice(1, -1));
+                
+                likesCount.textContent = '(' + (likesCountInt += 1) + ')';
+            }
+        })
+    }
+
+    const unlikePost = (postId, likeButton) => {
+        const likesCount = likeButton.querySelector('#likesCount');
+
+        fetch(`/unlike?post_id=${postId}&viewer={{viewer}}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            if (response.ok) {
+                likeButton.setAttribute('data-liked', 'false');
+                likeButton.querySelector('i').classList.remove('fas');
+                likeButton.querySelector('i').classList.add('far');
+
+                let likesCountInt = parseInt(likesCount.textContent.slice(1, -1));
+                
+                likesCount.textContent = '(' + (likesCountInt -= 1) + ')';
+            }
+        })
+    }
+</script>

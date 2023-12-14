@@ -1,0 +1,32 @@
+<div class="tweet" data-post-id="{{post_id}}">
+    <div class="user-info"> <!-- Wrap name and username in the anchor element -->
+        {{#if isPostCreator}}
+            <div class="delete-container">
+                <button class="deleteButton" data-post-id="{{post_id}}">
+                    <i class="fas fa-trash-alt">{{viewer}}</i>
+                </button>
+            </div>
+        {{/if}}
+        <a href="/{{username}}"><img src="{{avatar}}" alt="Profile Picture"></a>
+        <h2><a href="/{{username}}">{{name}}</a></h2>
+        <p>@<a href="/{{username}}">{{username}}</a></p>
+        <p>- {{posted}}</p>
+    </div>
+    <div class="tweet-content">
+        <p>{{content}}</p>
+    </div>
+    <div class="tweet-actions">
+        <a class="commentButton" data-post-id="{{post_id}}">
+            <i class="fas fa-comment"></i>
+            <p id="commentsCount" class="tweet-actions-count">({{commentsCount}})</p>
+        </a>
+        <a class="likeButton" data-post-id="{{post_id}}" data-liked={{liked}}>
+            {{#if liked}}
+                <i class="fas fa-heart"></i>
+            {{else}}
+                <i class="far fa-heart"></i>
+            {{/if}}
+            <p id="likesCount" class="tweet-actions-count">({{likesCount}})</p>
+        </a>
+    </div>
+</div>

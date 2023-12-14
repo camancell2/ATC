@@ -1,0 +1,764 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+/* Header styles */
+header {
+    background-color: #00aced;
+    color: white;
+    padding: 10px 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 35%;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    margin-right: 20px; /* Original margin for larger screens */
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+}
+
+li {
+    margin-right: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.profile {
+    width: calc(50% + 300px);
+    background-color: white;
+    flex-direction: column;
+    min-height: 550px; /* Use min-height to allow the container to expand as needed */
+    position: relative;
+    display: flex;
+    border-bottom: 1px solid darkslategrey; /* Add the border back */
+    background-color: #000;
+}
+
+.profile > .banner > img {
+    width: 700px;
+    height: 225px;
+    max-height: 375px;
+    display: block;
+}
+
+.profile-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 200px; /* Adjust the bottom value to control how much the profile image overlays the banner */
+    z-index: 1;
+}
+
+.profile-overlay img {
+    width: 150px; /* Adjust the width of the profile image */
+    height: 150px; /* Adjust the height of the profile image */
+    border: 2px solid black; /* Add a border for separation */
+    border-radius: 50%; /* Create a circular profile picture */
+    position: absolute;
+    top: 175px;
+    left: 15px; /* Adjust the position of the profile image */
+}
+
+.profile-info {
+    position: absolute;
+    top: 350px; /* Adjust the top position as needed */
+    left: 20px; /* Adjust the left position for spacing from the left */
+    color: #000; /* Text color for name, username, and join date */
+    font-size: 16px; /* Adjust the font size as needed */
+    word-wrap: break-word;
+    max-width: 600px;
+}
+
+.profile-info h2 {
+    font-weight: bold; /* Make the name bold */
+    margin: 0;
+    color: white;
+}
+
+.profile-info p {
+    font-size: 16px;
+    margin: 5px 0; /* Add spacing between lines */
+    color: white;
+}
+
+.profile-bio {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.profile-bio p {
+    font-size: 16px;
+}
+
+.follow-info {
+    display: flex; /* Make the "Followers" and "Following" text elements align horizontally */
+    align-items: center; /* Vertically align the text in the center */
+}
+
+.follow-info p {
+    margin: 0;
+}
+
+.follow-info p:last-child {
+    padding-left: 10px;
+    margin: 0 10px 0 0; /* Add margin only on the right side to separate "Following" from "Followers" */
+}
+
+.follow-container {
+    position: relative;
+}
+
+.follow-button {
+    background-color: #00aced;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px; /* Adjust the padding as needed */
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px; /* Adjust the top position for spacing */
+    right: 15px; /* Adjust the right position for spacing */
+    z-index: 2;
+}
+
+.follow-button:hover {
+    background-color: #0077b3;
+    transition: background-color 0.5s;
+}
+
+.edit-profile-button {
+    background-color: #00aced;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px; /* Adjust the padding as needed */
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 10px; /* Adjust the top position for spacing */
+    right: 15px; /* Adjust the right position for spacing */
+    z-index: 2;
+}
+
+.edit-profile-button:hover {
+    background-color: #0077b3;
+    transition: background-color 0.5s;
+}
+
+/* Main content styles */
+main {
+    margin: 0px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100px;
+    background-color: black;
+    height: 100%;
+}
+
+/* Tweet container styles */
+.tweet-box {
+    width: 700px;
+    background-color: black;
+    border: 1px solid darkslategray;
+    border-top: none;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    position: relative;
+}
+
+.tweet-box textarea {
+    width: 100%;
+    height: 100px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+    margin-bottom: 10px;
+    outline: none;
+    background-color: black;
+    color: white;
+}
+
+.separator-line {
+    border-top: 1px solid darkslategray;
+    margin: 10px 0;
+}
+
+.tweet-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.icon-options {
+    display: flex;
+    align-items: center;
+}
+
+.image-option i.fa, .gif-option i.fa {
+    font-size: 24px;
+    color: #00aced;
+}
+
+.image-option i.fa:hover, .gif-option i.fa:hover {
+    color: #0077b3;
+    transition: color 0.5s;
+}
+
+.gif-option i.fa {
+    margin-left: 15px;
+}
+
+.tweet-button {
+    background-color: #00aced;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.tweet-button:hover {
+    background-color: #0077b3;
+    transition: background-color 0.5s;
+}
+
+.tweets {
+    width: 800px;
+    max-width: 800px; /* Adjust the maximum width as needed */
+    background-color: black;
+}
+
+.tweet {
+    width: calc(50% + 300px);
+    margin: 5 auto;
+    border-bottom: 1px solid darkslategray;
+    background-color: black;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.tweet:last-child {
+    margin-bottom: 21px;
+}
+
+.tweet > .tweet-content p {
+    padding-left: 55px;
+    color: white;
+}
+
+.tweet > .tweet-content img {
+    max-width: 600px;
+    max-height: 400px;
+    padding-left: 55px;
+    position: relative;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+}
+
+.user-info h2 a {
+    margin: 0;
+    font-weight: bold; /* Make the Name bold */
+    font-size: 16px; /* Set the font size for the Name */
+    margin-right: 5px; /* Add a bit of spacing between Name and Username */
+    color: white;
+}
+
+.user-info h2:hover {
+    text-decoration: underline;
+}
+
+.user-info p {
+    color: white;
+}
+
+.user-info p a {
+    margin: 0;
+    margin-right: 5px; /* Add spacing between Username and Time */
+    color: white;
+}
+
+.user-info a img {
+    width: 40px; /* Adjust the width and height as needed */
+    height: 40px;
+    border-radius: 50%; /* Create a circular profile picture */
+    margin-right: 15px; /* Add some space between the picture and the name */
+}
+
+.tweet-actions {
+    display: flex;
+    justify-content: flex-start; /* Align actions to the left */
+    padding-top: 10px;
+    padding-left: 55px;
+}
+
+.tweet-actions a {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px; /* Add some spacing between action links */
+    text-decoration: none;
+}
+
+.tweet-actions-count {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 3px; /* Adjust margin as needed */
+    margin-top: -12px;
+}
+
+/* Style for icons */
+.tweet-actions a i {
+    font-size: 20px; /* Adjust the size of the icons as needed */
+    color: #00aced; /* Adjust the color of the icons */
+}
+
+.container {
+    max-width: 500px; /* Adjust the width as needed */
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid darkslategray;
+    background-color: #f9f9f9;
+    margin-top: 50px;
+    background-color: black;
+}
+
+.container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.container label {
+    display: block;
+    margin-top: 10px;
+    color: #555;
+}
+
+.container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid darkslategray;
+    border-radius: 3px;
+    background-color: black;
+    color: white;
+}
+
+.container button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #00aced;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.container button:hover {
+    background-color: #0077b3;
+    transition: background-color 0.5s;
+}
+
+.container a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.container a:hover {
+    text-decoration: underline;
+}
+
+.container p {
+    color: white;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    background-color: black;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #f5f5f5;
+    padding: 10px 0;
+    z-index: 2;
+}
+
+header {
+    z-index: 2;
+}
+
+/* Add vertical lines from header to footer */
+.page-container::before, .page-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: darkslategray;
+    z-index: 1;
+}
+
+.page-container::before {
+    left: calc(50% - 350px);
+}
+
+.page-container::after {
+    left: calc(50% + 349px);
+}
+
+.messages {
+    position: fixed;
+    bottom: 50px; /* Adjust the distance from the bottom as needed */
+    right: 50px; /* Adjust the distance from the right as needed */
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    color: #000;
+}
+
+.alert {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+
+    height: 35px; /* Fixed height */
+    width: 350px; /* Fixed width */
+}
+
+.close-button {
+    position: absolute;
+    right: 10px; /* Adjust the right position as needed */
+    cursor: pointer;
+}
+
+.alert-text {
+    padding-left: 20px; /* Add right padding to the text */
+}
+
+.alert-success {
+    background-color: #ccffcc;
+    border: 1px solid #00ff00;
+    color: #5bc0de;
+}
+
+.alert-warning {
+    background-color: #ffedcc;
+    border: 1px solid #ffaa00;
+    color: #ec971f;
+}
+
+.alert-error {
+    background-color: #ffcccc;
+    border: 1px solid #ff0000;
+    color: #d9534f;
+}
+
+.background-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(200, 200, 200, 0.5); /* Light transparent grey */
+    z-index: 2; /* Place it above the page content */
+}
+
+/* Styling for the modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 3;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 650px;
+    background-color: black; /* Light transparent white */
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Example shadow effect */
+    padding: 20px;
+    overflow: hidden; /* Ensure contents don't overflow */
+}
+
+.modal-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-content::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-container {
+    max-width: 400px; /* Adjust the width as needed */
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    margin-top: 50px;
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #333;
+}
+
+.form-container label {
+    display: block;
+    margin-top: 10px;
+    color: #555;
+}
+
+.form-container img {
+    width: 150px; /* Adjust the width of the profile image */
+    height: 150px; /* Adjust the height of the profile image */
+    border-radius: 50%; /* Create a circular profile picture */
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.form-container button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #0056b3; /* Darker color on hover */
+    transition: background-color 0.5s;
+}
+
+.form-container a {
+    color: #007bff; /* Link color */
+    text-decoration: none;
+}
+
+.form-container a:hover {
+    text-decoration: underline;
+}
+
+.mini-profile {
+    display: flex;
+    flex-direction: column;
+}
+
+.mini-profile-overlay {
+    margin-top: -50px; /* Adjust to vertically center the profile picture */
+    margin-left: 30px;
+}
+
+.mini-profile-overlay img {
+    width: 150px; /* Adjust the size of the profile picture */
+    height: 150px; /* Adjust the size of the profile picture */
+    border-radius: 50%; /* Create a circular profile picture */
+    border: 2px solid black; /* Add a border for separation */
+}
+
+.mini-banner {
+    width: 100%;
+    max-height: 350px; /* Adjust the height of the banner */
+    overflow: hidden;
+    margin-top: 50px; /* Adjust the top margin to move the banner down */
+    margin-left: 10px;
+}
+
+.mini-banner img {
+    height: 175px;
+    width: 550px;
+}
+
+.upload-container {
+    position: relative;
+    display: inline-block;
+}
+
+.upload-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.upload-overlay::after {
+    content: '+';
+    font-size: 24px;
+    color: white;
+}
+
+.mini-profile-info form {
+    width: 100%;
+    max-width: 400px; /* Adjusted maximum width for the form */
+    margin: 0 auto;
+}
+
+.mini-profile-info label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000; /* Twitter uses a dark text color */
+}
+
+.mini-profile-info input[type="text"],
+.mini-profile-info textarea {
+    width: calc(100% - 20px); /* Adjusted width for input fields and textareas */
+    padding: 8px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+}
+
+.mini-profile-info input[type="text"]:focus,
+.mini-profile-info textarea:focus {
+    outline: none;
+    border-color: #1da1f2; /* Twitter uses a blue focus color */
+}
+
+.mini-profile-info textarea {
+    resize: vertical;
+    min-height: 100px; /* Minimum height for the textarea */
+    max-height: 200px; /* Maximum height for the textarea */
+    background-color: black;
+    color: white;
+}
+
+.mini-profile-info input[type="submit"] {
+    background-color: #1da1f2; /* Twitter's primary color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 250px;
+    font-size: 16px;
+}
+
+.mini-profile-info input[type="submit"]:hover {
+    background-color: #0d91e5; /* Darker shade of primary color on hover */
+}
+
+.likeButton {
+    cursor: pointer;
+}
+
+.likeButton:hover {
+    cursor: pointer;
+}
+
+.commentButton {
+    cursor: pointer;
+}
+
+.commentButton:hover {
+    cursor: pointer;
+}
+
+.rounded-input {
+    border-radius: 20px; /* Adjust the radius as desired */
+    padding: 8px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.delete-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 10px; /* Adjust this value to fine-tune the vertical positioning */
+    margin-right: -5px; /* Adjust this value to fine-tune the horizontal positioning */
+}
+
+.deleteButton {
+    background-color: rgba(255, 0, 0, 0);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
